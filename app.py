@@ -2,8 +2,10 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 import time
-from examples.track import *
+from yolo_tracking.examples.track import *
 import os
+import cv2
+from webcam2 import main as webcam_main
 
 # from examples.multi_yolo_backend import MultiYolo
 # from examples.utils import write_MOT_results
@@ -12,6 +14,10 @@ import os
 st.title("APAS (Advanced Pedestrian Aassistance System)")
 st.subheader("CV-10 : Bro3Sis1 Team")
 
+# st.camera_input("Capture Image")
+# from streamlit_webrtc import VideoTransformerBase, webrtc_streamer
+# webrtc_streamer(key="example")
+
 
 def show_app(image_placeholder, img):
     image_placeholder.image(img)
@@ -19,9 +25,6 @@ def show_app(image_placeholder, img):
 
 def main():
     data_type = st.selectbox("Please select data type !", ("Image", "Video"))
-    # upload model
-    # model =
-
     # upload data
     if data_type == "Image":
         st.info("Input Image File(.png or .jpg) to Inference")
@@ -40,7 +43,6 @@ def main():
             label_visibility="collapsed",
         )
 
-    # uploaded_file = np.array(uploaded_file)
     st.text(uploaded_file)
     st.text(type(uploaded_file))
 
@@ -55,7 +57,7 @@ def main():
             if uploaded_file:
                 # save file to tempDB
                 saved_dir = os.path.join(
-                    "/opt/ml/final_project/yolo_tracking/examples/tempDB",
+                    "/opt/ml/level3_cv_finalproject/yolo_tracking/examples/tempDB",
                     uploaded_file.name,
                 )
                 with open(saved_dir, "wb") as f:
@@ -77,6 +79,11 @@ def main():
                 st.error("Please Input Necessary Data !")
 
     st.success("Inference Complete !")
+
+    first_call = True
+    with st.spinner("webcam"):
+        webcam_main(first_call)
+        first_call = False
 
 
 if __name__ == "__main__":
