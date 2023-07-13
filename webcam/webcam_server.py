@@ -13,6 +13,7 @@ def main(first_call):
 
         # 소켓 생성 및 바인딩
         server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        server_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)  # 소켓 옵션 설정
         server_socket.bind(server_address)
 
         # 클라이언트 연결 대기
@@ -27,8 +28,7 @@ def main(first_call):
     image_placeholder = st.empty()
     data_buffer = b""
     data_size = struct.calcsize("L")
-    flag = 0
-    while flag < 100:
+    while True:
         # 설정한 데이터의 크기보다 버퍼에 저장된 데이터의 크기가 작은 경우
         while len(data_buffer) < data_size:
             # 데이터 수신
@@ -56,13 +56,14 @@ def main(first_call):
         from app import show_app
 
         show_app(image_placeholder, frame)
-        flag += 1
+
         # 프레임 디스플레이
         # cv2.imshow("Received Frame", frame)
         # if cv2.waitKey(1) == ord("q")
         #     break
 
     # 리소스 해제
+    client_socket.shutdown(socket.SHUT_RDWR)
     client_socket.close()
     server_socket.close()
     cv2.destroyAllWindows()
