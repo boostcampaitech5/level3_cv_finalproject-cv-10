@@ -5,18 +5,7 @@ import time
 from yolo_tracking.examples.track import *
 import os
 import cv2
-from webcam2 import main as webcam_main
-
-# from examples.multi_yolo_backend import MultiYolo
-# from examples.utils import write_MOT_results
-
-
-st.title("APAS (Advanced Pedestrian Aassistance System)")
-st.subheader("CV-10 : Bro3Sis1 Team")
-
-# st.camera_input("Capture Image")
-# from streamlit_webrtc import VideoTransformerBase, webrtc_streamer
-# webrtc_streamer(key="example")
+from webcam.webcam_server import main as webcam_main
 
 
 def show_app(image_placeholder, img):
@@ -24,66 +13,70 @@ def show_app(image_placeholder, img):
 
 
 def main():
-    data_type = st.selectbox("Please select data type !", ("Image", "Video"))
-    # upload data
-    if data_type == "Image":
-        st.info("Input Image File(.png or .jpg) to Inference")
-        uploaded_file = st.file_uploader(
-            "Input Image",
-            accept_multiple_files=True,
-            type=["png", "jpg"],
-            label_visibility="collapsed",
-        )
-    elif data_type == "Video":
-        st.info("Input Video File(.avi or .mp4) to Inference")
-        uploaded_file = st.file_uploader(
-            "Input Video",
-            accept_multiple_files=False,
-            type=["avi", "mp4"],
-            label_visibility="collapsed",
-        )
-
-    st.text(uploaded_file)
-    st.text(type(uploaded_file))
-
-    button = st.button("Start Inference")
-
-    with st.spinner("Inference In Progress"):
-        if button:
-            button = False
-            # track.py
-            opt = parse_opt()
-
-            if uploaded_file:
-                # save file to tempDB
-                saved_dir = os.path.join(
-                    "/opt/ml/level3_cv_finalproject/yolo_tracking/examples/tempDB",
-                    uploaded_file.name,
-                )
-                with open(saved_dir, "wb") as f:
-                    f.write(uploaded_file.getbuffer())
-
-                st.success("File Uploaded !")
-
-                opt.source = saved_dir
-                opt.streamlit = True
-                opt.show = True
-
-                result = run(vars(opt))
-                # if data_type == "Image":
-                #     for img in result:
-                #         st.image(img)
-                # elif data_type == "Video":
-                #     st.video(result)
-            else:
-                st.error("Please Input Necessary Data !")
-
-    st.success("Inference Complete !")
-
+    st.title("APAS (Advanced Pedestrian Aassistance System)")
+    st.subheader("CV-10 : Bro3Sis1 Team")
     first_call = True
-    with st.spinner("webcam"):
-        webcam_main(first_call)
-        first_call = False
+
+    mode = st.sidebar.selectbox(
+        "Please selecet Inference Mode !", ("Offline", "Online")
+    )
+    if mode == "Offline":
+        st.header("Offline Inference Mode")
+        data_type = st.selectbox("Please select data type !", ("Image", "Video"))
+        # upload data
+        if data_type == "Image":
+            st.info("Input Image File(.png or .jpg) to Inference")
+            uploaded_file = st.file_uploader(
+                "Input Image",
+                accept_multiple_files=True,
+                type=["png", "jpg"],
+                label_visibility="collapsed",
+            )
+        elif data_type == "Video":
+            st.info("Input Video File(.avi or .mp4) to Inference")
+            uploaded_file = st.file_uploader(
+                "Input Video",
+                accept_multiple_files=False,
+                type=["avi", "mp4"],
+                label_visibility="collapsed",
+            )
+
+        button = st.button("Start Inference")
+
+        with st.spinner("Inference In Progress"):
+            if button:
+                button = False
+                # track.py
+                opt = parse_opt()
+
+                if uploaded_file:
+                    # save file to tempDB
+                    saved_dir = os.path.join(
+                        "/opt/ml/level3_cv_finalproject/yolo_tracking/examples/tempDB",
+                        uploaded_file.name,
+                    )
+                    with open(saved_dir, "wb") as f:
+                        f.write(uploaded_file.getbuffer())
+
+                    st.success("File Uploaded !")
+
+                    opt.source = saved_dir
+                    opt.streamlit = True
+                    opt.show = True
+
+                    result = run(vars(opt))
+                    st.success("Inference Complete !")
+
+                else:
+                    st.error("Please Input Necessary Data !")
+
+    elif mode == "Online":
+        st.header("Online Inference Mode")
+        webcam_button = st.button("Start Inference")
+        with st.spinner("webcam"):
+            if webcam_button:
+                webcam_main(first_call)
+                first_call = False
 
 
 if __name__ == "__main__":
