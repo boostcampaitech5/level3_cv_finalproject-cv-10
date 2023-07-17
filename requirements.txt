@@ -14,5 +14,7 @@ filterpy>=1.4.5
 streamlit-webrtc
 twilio
 matplotlib
+ultralytics
+conda-forge::lap
 
-git+https://github.com/boostcampaitech5/level3_cv_finalproject-cv-10.git@feat/webcam
+git+https://github.com/mikel-brostrom/yolo_tracking.git
