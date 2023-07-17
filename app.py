@@ -6,7 +6,8 @@ from yolo_tracking.examples.track import *
 import os
 import cv2
 from webcam.webcam_server import main as webcam_main
-
+from streamlit_app.webcam.werbrtc.webrtc_app import video_frame_callback, webrtc_init
+from streamlit_webrtc import webrtc_streamer
 
 def show_app(image_placeholder, img):
     image_placeholder.image(img)
@@ -20,7 +21,15 @@ def main():
     mode = st.sidebar.selectbox(
         "Please selecet Inference Mode !", ("Offline", "Online")
     )
-    if mode == "Offline":
+    
+    if mode == "Online":
+        st.header("Online Inference Mode")
+        webcam_button = st.button("Start Inference")
+        with st.spinner("webcam"):
+            if webcam_button:
+                webrtc_init()
+                
+    elif mode == "Offline":
         st.header("Offline Inference Mode")
         data_type = st.selectbox("Please select data type !", ("Image", "Video"))
         # upload data
@@ -50,33 +59,26 @@ def main():
                 opt = parse_opt()
 
                 if uploaded_file:
-                    # save file to tempDB
-                    saved_dir = os.path.join(
-                        "/opt/ml/level3_cv_finalproject/yolo_tracking/examples/tempDB",
-                        uploaded_file.name,
-                    )
-                    with open(saved_dir, "wb") as f:
-                        f.write(uploaded_file.getbuffer())
+                    for file in uploaded_file:
+                        # save file to tempDB
+                        saved_dir = os.path.join(
+                            "/app/streamlit_app/yolo_tracking/examples/tempDB",
+                            file.name,
+                        )
+                        with open(saved_dir, "wb") as f:
+                            f.write(file.getbuffer())
 
-                    st.success("File Uploaded !")
+                        st.success("File Uploaded !")
 
-                    opt.source = saved_dir
-                    opt.streamlit = True
-                    opt.show = True
+                        opt.source = saved_dir
+                        opt.streamlit = True
+                        opt.show = True
 
-                    result = run(vars(opt))
-                    st.success("Inference Complete !")
+                        result = run(vars(opt))
+                        st.success("Inference Complete !")
 
                 else:
                     st.error("Please Input Necessary Data !")
-
-    elif mode == "Online":
-        st.header("Online Inference Mode")
-        webcam_button = st.button("Start Inference")
-        with st.spinner("webcam"):
-            if webcam_button:
-                webcam_main(first_call)
-                first_call = False
 
 
 if __name__ == "__main__":
