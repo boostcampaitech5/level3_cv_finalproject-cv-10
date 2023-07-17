@@ -14,3 +14,6 @@ filterpy>=1.4.5
 streamlit-webrtc
 twilio
 matplotlib
+ultralytics
+
+git+https://github.com/mikel-brostrom/yolo_tracking.git
