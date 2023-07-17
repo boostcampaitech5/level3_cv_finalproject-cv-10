@@ -1,4 +1,4 @@
-from streamlit_webrtc import webrtc_streamer
+from level3_cv_finalproject.webcam.webrtc.webcam_webrtc import webrtc_streamer
 import os
 import cv2
 from matplotlib import pyplot as plt
