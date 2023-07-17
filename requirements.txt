@@ -15,4 +15,4 @@ streamlit-webrtc
 twilio
 matplotlib
 
-git+https://github.com/boostcampaitech5/level3_cv_finalproject-cv-10@feat/webcam
+git+https://github.com/boostcampaitech5/level3_cv_finalproject-cv-10.git@feat/webcam
