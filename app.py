@@ -5,8 +5,8 @@ import time
 from yolo_tracking.examples.track import *
 import os
 import cv2
-from webcam.webcam_server import main as webcam_main
-from streamlit_app.webcam.werbrtc.webrtc_app import video_frame_callback, webrtc_init
+from webcam.socket.webcam_server import main as webcam_main
+from webcam.webrtc.webcam_webrtc import video_frame_callback, webrtc_init
 from streamlit_webrtc import webrtc_streamer
 
 def show_app(image_placeholder, img):
@@ -21,7 +21,7 @@ def main():
     mode = st.sidebar.selectbox(
         "Please selecet Inference Mode !", ("Offline", "Online")
     )
-    
+
     if mode == "Online":
         st.header("Online Inference Mode")
         webcam_button = st.button("Start Inference")
