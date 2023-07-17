@@ -15,6 +15,5 @@ streamlit-webrtc
 twilio
 matplotlib
 ultralytics
-conda-forge::lap
 
 git+https://github.com/mikel-brostrom/yolo_tracking.git
