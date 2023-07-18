@@ -9,6 +9,7 @@ from webcam.socket.webcam_server import main as webcam_main
 from webcam.webrtc.webcam_webrtc import video_frame_callback, webrtc_init
 from streamlit_webrtc import webrtc_streamer
 
+
 def show_app(image_placeholder, img):
     image_placeholder.image(img)
 
@@ -24,11 +25,10 @@ def main():
 
     if mode == "Online":
         st.header("Online Inference Mode")
-        webcam_button = st.button("Start Inference")
         with st.spinner("webcam"):
             # if webcam_button:
             webrtc_init()
-                
+
     elif mode == "Offline":
         st.header("Offline Inference Mode")
         data_type = st.selectbox("Please select data type !", ("Image", "Video"))
