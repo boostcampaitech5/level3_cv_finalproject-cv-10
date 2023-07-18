@@ -19,15 +19,15 @@ def main():
     first_call = True
 
     mode = st.sidebar.selectbox(
-        "Please selecet Inference Mode !", ("Offline", "Online")
+        "Please selecet Inference Mode !", ("Online", "Offline")
     )
 
     if mode == "Online":
         st.header("Online Inference Mode")
         webcam_button = st.button("Start Inference")
         with st.spinner("webcam"):
-            if webcam_button:
-                webrtc_init()
+            # if webcam_button:
+            webrtc_init()
                 
     elif mode == "Offline":
         st.header("Offline Inference Mode")
