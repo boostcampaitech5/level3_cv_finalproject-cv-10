@@ -277,7 +277,7 @@ def parse_opt():
     parser.add_argument(
         "--yolo-model",
         type=Path,
-        default="/opt/ml/level3_cv_finalproject-cv-10/weights/yolov8n_100epoch_.pt",
+        default="/app/streamlit_app/weights/yolov8n_100epoch_.pt",
         help="model.pt path(s)",
     )
     parser.add_argument("--reid-model", type=Path, default="osnet_x0_25_msmt17.pt")

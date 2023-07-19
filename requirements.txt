@@ -15,5 +15,6 @@ streamlit-webrtc
 twilio
 matplotlib
 ultralytics
+py-cpuinfo
 
 git+https://github.com/mikel-brostrom/yolo_tracking.git
