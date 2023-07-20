@@ -1,7 +1,10 @@
 import math
 
 # class_num , x_center, y_center, width, height
-def warning_state_Algorithm(x_min,y_min,x_max,y_max,class_num,w,h):
+def warning_state_Algorithm(x_min,y_min,x_max,y_max,class_num,h,w):
+    
+    # setting
+    
     y = y_min
     x = (x_min+x_max)/2
     
@@ -24,11 +27,15 @@ def warning_state_Algorithm(x_min,y_min,x_max,y_max,class_num,w,h):
     lv2_line3 = ((-(h*0.33)/(w*0.173)))
     lv2_line3_b = w*0.83
     
+    direction_point  = w*0.3885
+    direction_point_reverse = w *(1- 0.3885)
     theta_point_x_reverse = w*0.5-w*0.3885
     theta_point1_y = h*0.5
     theta_point2_y = h*0.33 
     theta_point3_y = h*0.16
     
+    
+    # Area State
     
     safe = 0
     lv1 = 1
@@ -57,11 +64,30 @@ def warning_state_Algorithm(x_min,y_min,x_max,y_max,class_num,w,h):
             state = lv1
         elif y <= lv2_line3*(x-lv2_line3_b):
             state = lv2
-    ###
+    
          
     area_state = state
     
     ###
+    
+    # Direction State
+    
+    # center 0
+    # left side 1
+    # right side 2
+    
+    if x < direction_point:
+        direction = 1
+    elif direction_point <= x <= direction_point_reverse:
+        direction = 0
+    else:
+        direction = 2
+    
+    direction_state = direction
+    
+    ###
+    
+    # Theta State
     
     cos = (y/(math.sqrt((x-vision_point)**2+y**2)))
     theta = math.acos(cos)
@@ -96,6 +122,10 @@ def warning_state_Algorithm(x_min,y_min,x_max,y_max,class_num,w,h):
             
     theta_state = theta_in
     
+    
+    
+    # Warning State
+    
     warning = 0
     if area_state == 0:  # safe
         warning = 0
@@ -110,25 +140,67 @@ def warning_state_Algorithm(x_min,y_min,x_max,y_max,class_num,w,h):
         else:
             warning = 3 # red
     
+    
+    # Final Warning State        
+    
+    # 0 : safe
+    # 1 : lv1, left
+    # 2 : lv1, right
+    # 3 : lv1, center
+    # 4 : lv2, left
+    # 5 : lv2, right
+    # 6 : lv2, center
+    # 7 : lv3, center
+            
+    if warning == 0:
+        pass     
+    elif warning == 1:
+        if direction == 1:
+            warning = 1
+        elif direction == 2:
+            warning = 2
+        else:
+            warning = 3   
+    elif warning == 2:
+        if direction == 1:
+            warning = 4
+        elif direction == 2:
+            warning = 5
+        else:
+            warning = 6
+        
+    elif warning == 3:
+        warning = 7
+    
     return class_num,warning
     
     
     
     
-# if __name__ == "__main__":
+if __name__ == "__main__":
     
-#     CLASSES=['wheelchair',"truck","tree_trunk","traffic_sign",'traffic_light',"traffic_light_controller","table","stroller","stop","scooter","potted_plant","power_controller","pole","person","parking_meter","movable_signage","motorcycle","kiosk","fire_hydrant","dog","chair","cat","carrier","car","bus","bollard","bicycle","bench","barricade"]
+    CLASSES=['wheelchair',"truck","tree_trunk","traffic_sign",'traffic_light',"traffic_light_controller","table","stroller","stop","scooter","potted_plant","power_controller","pole","person","parking_meter","movable_signage","motorcycle","kiosk","fire_hydrant","dog","chair","cat","carrier","car","bus","bollard","bicycle","bench","barricade"]
     
-#     # 박스 좌표,클래스,해상도 받았다고 생각 2차원 리스트 bboxes_class
-#     warning_state_list = []
-#     cnt = 0
-#     for bbox in bboxes_class:
-#         cnt = 0 
-#         if cnt == len(bboxes_class):
-#             warning_state_list.sort()
-#             print(f"위험상태:{warning_state_list[0][0]} , 클래스:{CLASSES[warning_state_list[0][1]]}")
-#             warning_state_list = []
-#         else: 
-#             class_num,state = warning_state_Algorithm(bbox[0],bbox[1],bbox[2],bbox[3],bbox[4],bbox[5])
-#             warning_state_list.append((state,class_num))
-#             cnt += 1
+    # 박스 좌표,클래스,해상도 받았다고 생각 2차원 리스트 bboxes_class
+    warning_state_list = []
+    cnt = 0
+    for bbox in bboxes_class: 
+        if cnt == len(bboxes_class):
+            warning_state_list.sort(reverse=True)
+            if len(warning_state_list) >= 5:  # 위험구역 안에 5개 이상 위치한다면 warning mode 발동
+                if warning_state_list[4][0] >= 1:
+                    print("Warning mode")
+            print(f"위험상태:{warning_state_list[0][0]} , 클래스:{class_num}")
+            # 0 : safe
+            # 1 : lv1, left
+            # 2 : lv1, right
+            # 3 : lv1, center
+            # 4 : lv2, left
+            # 5 : lv2, rightㄴ
+            # 6 : lv2, center
+            # 7 : lv3, center
+            warning_state_list = []
+        else: 
+            class_num,state = warning_state_Algorithm(bbox[0],bbox[1],bbox[2],bbox[3],bbox[4],bbox[5])
+            warning_state_list.append((state,class_num))
+            cnt += 1
