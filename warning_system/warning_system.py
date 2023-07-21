@@ -180,27 +180,28 @@ def warning_state_Algorithm(x_min,y_min,x_max,y_max,class_num,h,w):
 if __name__ == "__main__":
     
     CLASSES=['wheelchair',"truck","tree_trunk","traffic_sign",'traffic_light',"traffic_light_controller","table","stroller","stop","scooter","potted_plant","power_controller","pole","person","parking_meter","movable_signage","motorcycle","kiosk","fire_hydrant","dog","chair","cat","carrier","car","bus","bollard","bicycle","bench","barricade"]
-    
+    # bboxes_class = [[480,280,481,281,0,960,540],[320,200,321,201,1,960,540],[600, 200, 650, 781.68212890625, 2, 960, 540],[376, 200, 377, 201, 3, 960, 540], # 0,1,2,3 -> lv1
+    #                [320,90,321,91,4,960,540],[590,90,591,91,5,960,540],[500,1,501,2,6,960,540],[480,91,481,92,7,960,540]] # 4,5,6 -> lv2 7 -> lv3
     # 박스 좌표,클래스,해상도 받았다고 생각 2차원 리스트 bboxes_class
     warning_state_list = []
     cnt = 0
     for bbox in bboxes_class: 
-        if cnt == len(bboxes_class):
-            warning_state_list.sort(reverse=True)
-            if len(warning_state_list) >= 5:  # 위험구역 안에 5개 이상 위치한다면 warning mode 발동
-                if warning_state_list[4][0] >= 1:
-                    print("Warning mode")
-            print(f"위험상태:{warning_state_list[0][0]} , 클래스:{class_num}")
-            # 0 : safe
-            # 1 : lv1, left
-            # 2 : lv1, right
-            # 3 : lv1, center
-            # 4 : lv2, left
-            # 5 : lv2, rightㄴ
-            # 6 : lv2, center
-            # 7 : lv3, center
-            warning_state_list = []
-        else: 
-            class_num,state = warning_state_Algorithm(bbox[0],bbox[1],bbox[2],bbox[3],bbox[4],bbox[5])
+            class_num,state = warning_state_Algorithm(bbox[0],bbox[1],bbox[2],bbox[3],bbox[4],bbox[6],bbox[5])
             warning_state_list.append((state,class_num))
             cnt += 1
+            if cnt == len(bboxes_class):
+                warning_state_list.sort(reverse=True)
+                if len(warning_state_list) >= 5:  # 위험구역 안에 5개 이상 위치한다면 warning mode 발동
+                    if warning_state_list[4][0] >= 1:
+                        print("Warning mode")
+                        
+                print(f"위험상태:{warning_state_list[0][0]} , 클래스:{class_num}")
+                
+                # 0 : safe
+                # 1 : lv1, left
+                # 2 : lv1, right
+                # 3 : lv1, center
+                # 4 : lv2, left
+                # 5 : lv2, right
+                # 6 : lv2, center
+                # 7 : lv3, center
