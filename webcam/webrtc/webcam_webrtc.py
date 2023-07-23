@@ -132,7 +132,7 @@ def webrtc_init():
                 if danger_level != 0:  # except safe
                     text_place.warning("주의하세요 !")
                     lv, dir = WARNING_LEVELS[str(danger_level)]
-                    audio_file_path = f"/app/level3_cv_finalproject-cv-10/webcam/webrtc/tts/{danger_class}_{lv}_{dir}.mp3"
+                    audio_file_path = f"/app/level3_cv_finalproject-cv-10/warning_system/tts/{danger_class}_{lv}_{dir}.mp3"
                     autoplay_audio(audio_file_path)
                 else:
                     text_place.success("안전합니다 !")
