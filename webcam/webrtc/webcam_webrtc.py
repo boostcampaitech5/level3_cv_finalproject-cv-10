@@ -90,7 +90,7 @@ def autoplay_audio(file_path: str):
 def webrtc_init():
     global model
 
-    model = YOLO("/app/streamlit_app/weights/yolov8n_jp.pt")
+    model = YOLO("/app/level3_cv_finalproject-cv-10/weights/yolov8n_jp.pt")
     os.environ["TWILIO_ACCOUNT_SID"] = st.secrets["TWILIO_ACCOUNT_SID"]
     os.environ["TWILIO_AUTH_TOKEN"] = st.secrets["TWILIO_AUTH_TOKEN"]
 
@@ -110,7 +110,7 @@ def webrtc_init():
         key="apas",
     )
 
-    recorded_audio_file = "/app/streamlit_app/webcam/webrtc/output.mp3"
+    recorded_audio_file = "/app/level3_cv_finalproject-cv-10/webcam/webrtc/sample.mp3"
     text_place = st.empty()
     danger_place = st.empty()
     while ctx.state.playing:
