@@ -6,7 +6,7 @@ from yolo_tracking.examples.track import *
 import os
 import cv2
 from webcam.socket.webcam_server import main as webcam_main
-from webcam.webrtc.webcam_webrtc import video_frame_callback, webrtc_init
+from webcam.webrtc.webcam_webrtc import create_video_frame_callback, webrtc_init
 from streamlit_webrtc import webrtc_streamer
 
 
@@ -15,7 +15,7 @@ def show_app(image_placeholder, img):
 
 
 def main():
-    st.title("APAS (Advanced Pedestrian Aassistance System)")
+    st.title("APAS (Advanced Pedestrian Assistance System)")
     st.subheader("CV-10 : Bro3Sis1 Team")
     first_call = True
 
@@ -62,7 +62,7 @@ def main():
                     for file in uploaded_file:
                         # save file to tempDB
                         saved_dir = os.path.join(
-                            "/app/streamlit_app/yolo_tracking/examples/tempDB",
+                            "/app/level3_cv_finalproject-cv-10/yolo_tracking/examples/tempDB",
                             file.name,
                         )
                         with open(saved_dir, "wb") as f:
