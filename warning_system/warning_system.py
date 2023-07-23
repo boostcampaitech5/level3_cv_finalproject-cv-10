@@ -77,11 +77,11 @@ def warning_state_Algorithm(x_min,y_min,x_max,y_max,class_num,h,w):
     # right side 2
     
     if x < direction_point:
-        direction = 1
+        direction = 2
     elif direction_point <= x <= direction_point_reverse:
         direction = 0
     else:
-        direction = 2
+        direction = 1
     
     direction_state = direction
     
@@ -185,23 +185,47 @@ if __name__ == "__main__":
     # 박스 좌표,클래스,해상도 받았다고 생각 2차원 리스트 bboxes_class
     warning_state_list = []
     cnt = 0
+    mode = "Normal Mode"
+    
     for bbox in bboxes_class: 
             class_num,state = warning_state_Algorithm(bbox[0],bbox[1],bbox[2],bbox[3],bbox[4],bbox[6],bbox[5])
             warning_state_list.append((state,class_num))
             cnt += 1
+            
             if cnt == len(bboxes_class):
                 warning_state_list.sort(reverse=True)
                 if len(warning_state_list) >= 5:  # 위험구역 안에 5개 이상 위치한다면 warning mode 발동
                     if warning_state_list[4][0] >= 1:
-                        print("Warning mode")
-                        
-                print(f"위험상태:{warning_state_list[0][0]} , 클래스:{class_num}")
+                        mode = "Warning Mode"
                 
-                # 0 : safe
-                # 1 : lv1, left
-                # 2 : lv1, right
-                # 3 : lv1, center
-                # 4 : lv2, left
-                # 5 : lv2, right
-                # 6 : lv2, center
-                # 7 : lv3, center
+                
+                # 우측통행을 기반으로 우선순위 고려
+                
+                if warning_state_list[0][0] == 0: # 0 : safe
+                    TTS = '안전'
+                    
+                elif warning_state_list[0][0] == 1:  # 1 : lv1, right
+                    TTS = '우측'+ CLASSES[class_num]+ '주의'
+                    
+                elif warning_state_list[0][0] == 2:  # 2 : lv1, left
+                    TTS = '좌측'+ CLASSES[class_num]+ '주의'
+                    
+                elif warning_state_list[0][0] == 3:  # 3 : lv1, center
+                    TTS = '전방'+ CLASSES[class_num]+ '주의'
+                    
+                elif warning_state_list[0][0] == 4:  # 4 : lv2, right
+                    TTS = '우측'+ CLASSES[class_num]+ '경고'
+                    
+                elif warning_state_list[0][0] == 5:  # 5 : lv2, left
+                    TTS = '좌측'+ CLASSES[class_num]+ '경고'
+                    
+                elif warning_state_list[0][0] == 6:  # 6 : lv2, center
+                    TTS = '전방'+ CLASSES[class_num]+ '경고'
+                    
+                elif warning_state_list[0][0] == 7:  # 7 : lv3, center
+                    TTS = '전방'+ CLASSES[class_num]+ '위험'
+                    
+                print(TTS)
+                
+                
+                        
