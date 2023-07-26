@@ -46,7 +46,7 @@ def main():
             st.info("Input Video File(.avi or .mp4) to Inference")
             uploaded_file = st.file_uploader(
                 "Input Video",
-                accept_multiple_files=False,
+                accept_multiple_files=True,
                 type=["avi", "mp4"],
                 label_visibility="collapsed",
             )
