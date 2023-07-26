@@ -11,7 +11,8 @@ from streamlit_webrtc import webrtc_streamer
 
 
 def show_app(image_placeholder, img):
-    image_placeholder.image(img, channels= "BGR")
+    img = cv2.cvtColor(img, cv2.BGR2RGB)
+    image_placeholder.image(img)
 
 
 def main():
