@@ -11,7 +11,7 @@ from streamlit_webrtc import webrtc_streamer
 
 
 def show_app(image_placeholder, img):
-    image_placeholder.image(img)
+    image_placeholder.image(img, channels= "BGR")
 
 
 def main():
