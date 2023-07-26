@@ -195,6 +195,7 @@ def run(args):
             # display an image in a window using OpenCV imshow()
             if predictor.args.show and predictor.plotted_img is not None:
                 # predictor.show(p.parent)
+                plotted_img_rgb = predictor.plotted_img
                 show_app(image_placeholder, predictor.plotted_img)
 
             # save video predictions
@@ -228,7 +229,7 @@ def run(args):
 def parse_opt():
     global opt
     parser = argparse.ArgumentParser()
-    parser.add_argument('--yolo-model', type=Path, default="/mount/src/level3_cv_finalproject-cv-10/weights/yolov8n_100epoch_.pt", help='model.pt path(s)')
+    parser.add_argument('--yolo-model', type=Path, default="/app/level3_cv_finalproject-cv-10/weights/yolov8n_100epoch_.pt", help='model.pt path(s)')
     parser.add_argument('--reid-model', type=Path, default="osnet_x0_25_msmt17.pt")
     parser.add_argument('--tracking-method', type=str, default='deepocsort',
                         help='deepocsort, botsort, strongsort, ocsort, bytetrack')
