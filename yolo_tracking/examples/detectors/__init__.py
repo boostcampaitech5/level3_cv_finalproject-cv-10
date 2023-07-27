@@ -1,4 +1,4 @@
-from boxmot.utils.checks import TestRequirements
+from yolo_tracking.boxmot.utils.checks import TestRequirements
 
 tr = TestRequirements()
 

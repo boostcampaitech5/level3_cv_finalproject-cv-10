@@ -1,4 +1,5 @@
 
+streamlit
 torch>=1.7.0
 torchvision>=0.8.1
 numpy==1.23.1           # otherwise issues with track eval
@@ -14,9 +15,12 @@ filterpy>=1.4.5
 streamlit-webrtc
 twilio
 matplotlib
-ultralytics
+ultralytics==8.0.140
 py-cpuinfo
 gtts
 pydub
+# lap
 
-git+https://github.com/mikel-brostrom/yolo_tracking.git
+# git+https://github.com/gatagat/lap.git
+
+# git+https://github.com/mikel-brostrom/yolo_tracking.git

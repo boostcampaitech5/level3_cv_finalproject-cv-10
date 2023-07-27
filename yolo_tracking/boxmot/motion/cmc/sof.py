@@ -4,8 +4,8 @@ import time
 import cv2
 import numpy as np
 
-from boxmot.motion.cmc.cmc_interface import CMCInterface
-from boxmot.utils import BOXMOT
+from yolo_tracking.boxmot.motion.cmc.cmc_interface import CMCInterface
+from yolo_tracking.boxmot.utils import BOXMOT
 
 
 class SparseOptFlow(CMCInterface):

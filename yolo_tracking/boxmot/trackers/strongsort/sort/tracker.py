@@ -3,7 +3,7 @@ from __future__ import absolute_import
 
 import numpy as np
 
-from boxmot.motion.cmc.ecc import ECC
+from yolo_tracking.boxmot.motion.cmc.ecc import ECC
 
 from ....utils.matching import chi2inv95
 from . import detection, iou_matching, linear_assignment

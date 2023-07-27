@@ -6,11 +6,11 @@ from pathlib import Path
 import cv2
 import torch
 
-from ..boxmot.tracker_zoo import create_tracker
-from ..boxmot.utils import ROOT, WEIGHTS
-from ..boxmot.utils import logger as LOGGER
-from ..boxmot.utils.checks import TestRequirements
-from ..boxmot.utils.torch_utils import select_device
+from yolo_tracking.boxmot.tracker_zoo import create_tracker
+from yolo_tracking.boxmot.utils import ROOT, WEIGHTS
+from yolo_tracking.boxmot.utils import logger as LOGGER
+from yolo_tracking.boxmot.utils.checks import TestRequirements
+from yolo_tracking.boxmot.utils.torch_utils import select_device
 
 __tr = TestRequirements()
 __tr.check_packages(('ultralytics==8.0.124',))  # install
@@ -24,7 +24,7 @@ from ultralytics.yolo.utils.files import increment_path
 from ultralytics.yolo.utils.plotting import save_one_box
 from .utils import write_MOT_results
 
-from ..boxmot.utils import EXAMPLES
+from yolo_tracking.boxmot.utils import EXAMPLES
 from app import show_app
 import streamlit as st
 
