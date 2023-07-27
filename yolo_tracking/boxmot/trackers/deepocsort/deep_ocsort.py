@@ -5,11 +5,11 @@
 import numpy as np
 import torch
 
-from boxmot.appearance.reid_multibackend import ReIDDetectMultiBackend
-from boxmot.motion.adapters import OCSortKalmanFilterAdapter
-from boxmot.motion.cmc import get_cmc_method
-from boxmot.utils import PerClassDecorator
-from boxmot.utils.association import (associate, associate_kitti, ciou_batch,
+from yolo_tracking.boxmot.appearance.reid_multibackend import ReIDDetectMultiBackend
+from yolo_tracking.boxmot.motion.adapters import OCSortKalmanFilterAdapter
+from yolo_tracking.boxmot.motion.cmc import get_cmc_method
+from yolo_tracking.boxmot.utils import PerClassDecorator
+from yolo_tracking.boxmot.utils.association import (associate, associate_kitti, ciou_batch,
                                       ct_dist, diou_batch, giou_batch,
                                       iou_batch, linear_assignment)
 
