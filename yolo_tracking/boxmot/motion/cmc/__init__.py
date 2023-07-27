@@ -1,7 +1,7 @@
-from boxmot.motion.cmc.ecc import ECC
-from boxmot.motion.cmc.orb import ORB
-from boxmot.motion.cmc.sift import SIFT
-from boxmot.motion.cmc.sof import SparseOptFlow
+from yolo_tracking.boxmot.motion.cmc.ecc import ECC
+from yolo_tracking.boxmot.motion.cmc.orb import ORB
+from yolo_tracking.boxmot.motion.cmc.sift import SIFT
+from yolo_tracking.boxmot.motion.cmc.sof import SparseOptFlow
 
 
 def get_cmc_method(cmc_method):
