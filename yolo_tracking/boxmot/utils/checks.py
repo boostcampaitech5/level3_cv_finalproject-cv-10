@@ -2,7 +2,7 @@ import subprocess
 
 import pkg_resources
 
-from boxmot.utils import REQUIREMENTS, logger
+from yolo_tracking.boxmot.utils import REQUIREMENTS, logger
 
 
 class TestRequirements():
