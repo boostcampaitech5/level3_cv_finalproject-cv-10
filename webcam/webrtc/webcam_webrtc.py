@@ -18,8 +18,18 @@ from warning_system.warning_system import warning_state_Algorithm
 import queue
 
 
-def generate_label_colors(classes=29):
-    return np.random.uniform(0, 255, size=(classes, 3))
+def generate_label_colors():
+    colors = np.array([
+        [0, 255, 0],    # 초록
+        [255, 255, 0],  # 노랑
+        [255, 255, 0],  # 노랑
+        [255, 255, 0],  # 노랑 
+        [255, 165, 0],  # 주황
+        [255, 165, 0],  # 주황 
+        [255, 165, 0],  # 주황 
+        [255, 0, 0],    # 빨강
+    ])
+    return colors
 
 
 COLORS = generate_label_colors()
@@ -54,7 +64,16 @@ def create_video_frame_callback():
         for xmin, ymin, xmax, ymax, score, label in boxes:
             xmin, ymin, xmax, ymax = map(int, [xmin, ymin, xmax, ymax])
             label_name = classes[int(label.item())]
-            color = COLORS[int(label.item())]
+            
+            classnum,warning_state = warning_state_Algorithm(xmin, ymin, xmax, ymax, label_name, h, w)
+            color = COLORS[warning_state] # 위험 상태에 따른 bbox color 설정
+            
+            if frame_count % 50 == 0: # 50 frame 마다 danger에 append
+                # danger.append(label_name)
+                danger.append(
+                    (classnum,warning_state)
+                )
+
             cv2.rectangle(image, (xmin, ymin), (xmax, ymax), color, 2)
             cv2.putText(
                 image,
@@ -65,11 +84,7 @@ def create_video_frame_callback():
                 color,
                 2,
             )
-            if frame_count % 50 == 0:
-                # danger.append(label_name)
-                danger.append(
-                    (warning_state_Algorithm(xmin, ymin, xmax, ymax, label_name, h, w))
-                )
+            
         if frame_count % 50 == 0:
             result_queue.put(danger)
         frame_queue.put(frame_count)
@@ -100,7 +115,7 @@ def autoplay_audio(file_path: str, playback_rate=1.5):
 def webrtc_init():
     global model
 
-    model = YOLO("/mount/src/level3_cv_finalproject-cv-10/weights/yolov8n_jp.pt")
+    model = YOLO("/app/level3_cv_finalproject-cv-10/weights/yolov8n_jp.pt")
     os.environ["TWILIO_ACCOUNT_SID"] = st.secrets["TWILIO_ACCOUNT_SID"]
     os.environ["TWILIO_AUTH_TOKEN"] = st.secrets["TWILIO_AUTH_TOKEN"]
 
@@ -121,37 +136,61 @@ def webrtc_init():
     )
 
     text_place = st.empty()
-    start_time = time.time()
-    # time_total = 0
-    fps = 0
+    
+    mode = "nomal_mode"
+    
     while ctx.state.playing:
+        
         frame_num = frame_queue.get()
-
-        # get time per frame
-        end_time = time.time()
-        time_per_frame = end_time - start_time
-        start_time = end_time
-
-        # get total time
-        # time_total += time_per_frame
-
-        # st.text(f"frame_num {frame_num} : {time_per_frame}")
         if frame_num % 50 == 0:  # for every 50 frames
             result = result_queue.get()
 
             if len(result) != 0:
                 result.sort(key=lambda x: x[1], reverse=True)
-                danger_class, danger_level = result[0]
-                if danger_level != 0:  # except safe
-                    text_place.warning("주의하세요 !")
-                    lv, dir = WARNING_LEVELS[str(danger_level)]
-                    audio_file_path = f"/mount/src/level3_cv_finalproject-cv-10/warning_system/tts/{danger_class}_{lv}_{dir}.mp3"
-                    autoplay_audio(audio_file_path)
-                else:
-                    text_place.success("안전합니다 !")
+                
+                # 1. 노말 모드였는데 5개이상이 detect -> warning mode
+                if len(result) >= 5 and mode == "nomal_mode": 
+                    if result[4][1] >= 1:                      # 5개 이상이 위험구역 안에 들어왔을때
+                        mode = "warning_mode" 
+                        text_place.warning("주변에 탐지되는 물체가 5개 이상입니다!")
+                        audio_file_path = f"/app/level3_cv_finalproject-cv-10/warning_system/tts/{mode}.mp3"
+                        autoplay_audio(audio_file_path)
+                    else:                                      # 5개 이상 detect가 되었으나 위험구역안에 5개 이하
+                        danger_class, danger_level = result[0]
+                        if danger_level != 0:  # except safe
+                            text_place.warning("주의하세요 !")
+                            lv, dir = WARNING_LEVELS[str(danger_level)]
+                            audio_file_path = f"/app/level3_cv_finalproject-cv-10/warning_system/tts/{danger_class}_{lv}_{dir}.mp3"
+                            autoplay_audio(audio_file_path)
+                        else:
+                            text_place.success("안전합니다 !")
+                # 2. 워닝 모드였는데 5개 이하가 detect -> nomal mode         
+                elif len(result) < 5 and mode == "warning_mode": 
+                        mode = "nomal_mode"
+                        text_place.warning("주변에 탐지되는 물체가 5개 이하입니다!")
+                        audio_file_path = f"/app/level3_cv_finalproject-cv-10/warning_system/tts/{mode}.mp3"
+                        autoplay_audio(audio_file_path)
+                        
+                # 3. 워닝 모드였는데 5개 이상 detect -> stil 워닝모드
+                elif len(result) >= 5 and mode == "warning_mode":
+                    danger_class, danger_level = result[0]
+                    if danger_level != 0:  # except safe
+                        text_place.warning("주의하세요 !")
+                        lv, dir = WARNING_LEVELS[str(danger_level)]
+                        audio_file_path = f"/app/level3_cv_finalproject-cv-10/warning_system/tts/{danger_class}_{lv}_{dir}.mp3"
+                        autoplay_audio(audio_file_path)
+                    else:
+                        text_place.success("안전합니다 !")
+                
+                # 4. 노말 모드였는데 5개 이하 detect -> still nomal mode
+                elif len(result) < 5 and mode ==  "nomal_mode":
+                    danger_class, danger_level = result[0]
+                    if danger_level != 0:  # except safe
+                        text_place.warning("주의하세요 !")
+                        lv, dir = WARNING_LEVELS[str(danger_level)]
+                        audio_file_path = f"/app/level3_cv_finalproject-cv-10/warning_system/tts/{danger_class}_{lv}_{dir}.mp3"
+                        autoplay_audio(audio_file_path)
+                    else:
+                        text_place.success("안전합니다 !")
             else:
                 text_place.success("안전합니다 !")
-
-            # # when see fps
-            # fps = 1 / time_per_frame
-            # st.text(f"fps : {fps}")
