@@ -20,14 +20,14 @@ import queue
 
 def generate_label_colors():
     colors = np.array([
-        [0, 255, 0],    # 초록
-        [255, 255, 0],  # 노랑
-        [255, 255, 0],  # 노랑
-        [255, 255, 0],  # 노랑 
-        [255, 165, 0],  # 주황
-        [255, 165, 0],  # 주황 
-        [255, 165, 0],  # 주황 
-        [255, 0, 0],    # 빨강
+        [0.1, 254.0, 0.1],    # 초록
+        [0.1, 254.0, 254.0],  # 노랑
+        [0.1, 254.0, 254.0],  # 노랑
+        [0.1, 254.0, 254.0],  # 노랑 
+        [0.1, 164.0, 254.0],  # 주황
+        [ 0.1, 164.0, 254.0], # 주황 
+        [ 0.1, 164.0, 254.0], # 주황 
+        [0.1, 0.1, 254.1],    # 빨강
     ])
     return colors
 
@@ -66,14 +66,7 @@ def create_video_frame_callback():
             label_name = classes[int(label.item())]
             
             classnum,warning_state = warning_state_Algorithm(xmin, ymin, xmax, ymax, label_name, h, w)
-            color = COLORS[warning_state] # 위험 상태에 따른 bbox color 설정
-            
-            if frame_count % 50 == 0: # 50 frame 마다 danger에 append
-                # danger.append(label_name)
-                danger.append(
-                    (classnum,warning_state)
-                )
-
+            color = COLORS[warning_state]
             cv2.rectangle(image, (xmin, ymin), (xmax, ymax), color, 2)
             cv2.putText(
                 image,
@@ -84,6 +77,14 @@ def create_video_frame_callback():
                 color,
                 2,
             )
+            
+            if frame_count % 50 == 0: # 50 frame 마다 danger에 append
+                # danger.append(label_name)
+                danger.append(
+                   (classnum,warning_state)
+                )
+
+            
             
         if frame_count % 50 == 0:
             result_queue.put(danger)
@@ -114,7 +115,7 @@ def autoplay_audio(file_path: str, playback_rate=1.5):
 
 def webrtc_init():
     global model
-
+    
     model = YOLO("/mount/src/level3_cv_finalproject-cv-10/weights/yolov8n_jp.pt")
     os.environ["TWILIO_ACCOUNT_SID"] = st.secrets["TWILIO_ACCOUNT_SID"]
     os.environ["TWILIO_AUTH_TOKEN"] = st.secrets["TWILIO_AUTH_TOKEN"]
@@ -180,7 +181,7 @@ def webrtc_init():
                         audio_file_path = f"/mount/src/level3_cv_finalproject-cv-10/warning_system/tts/{danger_class}_{lv}_{dir}.mp3"
                         autoplay_audio(audio_file_path)
                     else:
-                        text_place.success("안전합니다 !")
+                        text_place.success("안전합니다2 !")
                 
                 # 4. 노말 모드였는데 5개 이하 detect -> still nomal mode
                 elif len(result) < 5 and mode ==  "nomal_mode":
