@@ -123,7 +123,7 @@ def webrtc_init():
     text_place = st.empty()
     start_time = time.time()
     # time_total = 0
-    fps = 0
+    fps_list = []
     while ctx.state.playing:
         frame_num = frame_queue.get()
 
@@ -154,4 +154,5 @@ def webrtc_init():
 
 
             fps = 1 / time_per_frame
-            st.text(f"fps : {fps}")
+            fps_list.append(fps)
+    st.text(f"fps : {fps_list}")
