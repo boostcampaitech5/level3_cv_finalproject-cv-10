@@ -2,11 +2,11 @@ import cv2
 import numpy as np
 import torch
 
-from boxmot.appearance.reid_multibackend import ReIDDetectMultiBackend
-from boxmot.trackers.strongsort.sort.detection import Detection
-from boxmot.trackers.strongsort.sort.tracker import Tracker
-from boxmot.utils.matching import NearestNeighborDistanceMetric
-from boxmot.utils.ops import xyxy2xywh
+from yolo_tracking.boxmot.appearance.reid_multibackend import ReIDDetectMultiBackend
+from yolo_tracking.boxmot.trackers.strongsort.sort.detection import Detection
+from yolo_tracking.boxmot.trackers.strongsort.sort.tracker import Tracker
+from yolo_tracking.boxmot.utils.matching import NearestNeighborDistanceMetric
+from yolo_tracking.boxmot.utils.ops import xyxy2xywh
 
 
 class StrongSORT(object):
