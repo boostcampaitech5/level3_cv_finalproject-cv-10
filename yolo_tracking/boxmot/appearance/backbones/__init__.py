@@ -1,18 +1,18 @@
 from __future__ import absolute_import
 
-from boxmot.appearance.backbones.hacnn import HACNN
-from boxmot.appearance.backbones.lmbn_n import LMBN_n
-from boxmot.appearance.backbones.mlfn import mlfn
-from boxmot.appearance.backbones.mobilenetv2 import (mobilenetv2_x1_0,
+from yolo_tracking.boxmot.appearance.backbones.hacnn import HACNN
+from yolo_tracking.boxmot.appearance.backbones.lmbn_n import LMBN_n
+from yolo_tracking.boxmot.appearance.backbones.mlfn import mlfn
+from yolo_tracking.boxmot.appearance.backbones.mobilenetv2 import (mobilenetv2_x1_0,
                                                      mobilenetv2_x1_4)
-from boxmot.appearance.backbones.osnet import (osnet_ibn_x1_0, osnet_x0_5,
+from yolo_tracking.boxmot.appearance.backbones.osnet import (osnet_ibn_x1_0, osnet_x0_5,
                                                osnet_x0_25, osnet_x0_75,
                                                osnet_x1_0)
-from boxmot.appearance.backbones.osnet_ain import (osnet_ain_x0_5,
+from yolo_tracking.boxmot.appearance.backbones.osnet_ain import (osnet_ain_x0_5,
                                                    osnet_ain_x0_25,
                                                    osnet_ain_x0_75,
                                                    osnet_ain_x1_0)
-from boxmot.appearance.backbones.resnet import resnet50, resnet101
+from yolo_tracking.boxmot.appearance.backbones.resnet import resnet50, resnet101
 
 __model_factory = {
     # image classification models
