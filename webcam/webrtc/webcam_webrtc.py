@@ -135,7 +135,7 @@ def webrtc_init():
         # get total time
         # time_total += time_per_frame
 
-        st.text(f"frame_num {frame_num} : {time_per_frame}")
+        # st.text(f"frame_num {frame_num} : {time_per_frame}")
         if frame_num % 50 == 0:  # for every 50 frames
             result = result_queue.get()
 
