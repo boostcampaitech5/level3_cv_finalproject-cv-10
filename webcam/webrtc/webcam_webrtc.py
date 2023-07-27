@@ -122,11 +122,14 @@ def webrtc_init():
 
     text_place = st.empty()
     start_time = time.time()
+    time_total = 0
+    fps = 0
     while ctx.state.playing:
         frame_num = frame_queue.get()
         end_time = time.time()
         time_per_frame = end_time - start_time
         start_time = end_time
+        time_total += time_per_frame
         st.text(f"frame_num {frame_num} : {time_per_frame}")
         if frame_num % 50 == 0:  # for every 50 frames
             result = result_queue.get()
@@ -143,3 +146,6 @@ def webrtc_init():
                     text_place.success("안전합니다 !")
             else:
                 text_place.success("안전합니다 !")
+        if time_total > 1:
+            fps = 1 / time_total
+    st.text("total time : {time_total}, frame_num : {frame_num}, fps : {fps}")
