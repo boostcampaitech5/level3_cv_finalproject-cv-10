@@ -63,7 +63,7 @@ def main():
                     for file in uploaded_file:
                         # save file to tempDB
                         saved_dir = os.path.join(
-                            "/app/level3_cv_finalproject-cv-10/yolo_tracking/examples/tempDB",
+                            "/mount/src/level3_cv_finalproject-cv-10/yolo_tracking/examples/tempDB",
                             file.name,
                         )
                         with open(saved_dir, "wb") as f:
