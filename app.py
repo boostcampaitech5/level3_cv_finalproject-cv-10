@@ -26,10 +26,6 @@ def main():
             default_index=0,
         )
 
-    mode = st.sidebar.selectbox(
-        "Please selecet Inference Mode !", ("Online", "Offline")
-    )
-
     if mode == "Online":
         st.header("Online Inference Mode")
         with st.spinner("webcam"):
