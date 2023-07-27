@@ -21,5 +21,6 @@ gtts
 pydub
 # lap
 
+git+git://github.com/gatagat/lap.git
 
 # git+https://github.com/mikel-brostrom/yolo_tracking.git
