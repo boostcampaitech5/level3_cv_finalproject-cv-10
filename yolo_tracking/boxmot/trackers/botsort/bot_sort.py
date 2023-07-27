@@ -3,13 +3,14 @@ from collections import deque
 import numpy as np
 import torch
 
-from boxmot.appearance.reid_multibackend import ReIDDetectMultiBackend
-from boxmot.motion.adapters import BotSortKalmanFilterAdapter
-from boxmot.motion.cmc.sof import SparseOptFlow
-from boxmot.trackers.botsort.basetrack import BaseTrack, TrackState
-from boxmot.utils.matching import (embedding_distance, fuse_score,
+from yolo_tracking.boxmot.appearance.reid_multibackend import ReIDDetectMultiBackend
+from yolo_tracking.boxmot.motion.adapters import BotSortKalmanFilterAdapter
+from yolo_tracking.boxmot.motion.cmc.sof import SparseOptFlow
+from yolo_tracking.boxmot.trackers.botsort.basetrack import BaseTrack, TrackState
+from yolo_tracking.boxmot.utils.matching import (embedding_distance, fuse_score,
                                    iou_distance, linear_assignment)
-from boxmot.utils.ops import xywh2xyxy, xyxy2xywh
+from yolo_tracking.boxmot.utils.ops import xywh2xyxy, xyxy2xywh
+
 
 
 class STrack(BaseTrack):
