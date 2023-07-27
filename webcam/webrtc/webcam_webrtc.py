@@ -148,4 +148,4 @@ def webrtc_init():
                 text_place.success("안전합니다 !")
         if time_total > 1:
             fps = 1 / time_total
-    st.text("total time : {time_total}, frame_num : {frame_num}, fps : {fps}")
+    st.text(f"total time : {time_total}, frame_num : {frame_num}, fps : {fps}")
