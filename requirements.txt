@@ -20,6 +20,7 @@ py-cpuinfo
 gtts
 pydub
 # lap
+streamlit_option_menu
 
 # git+https://github.com/gatagat/lap.git
 
