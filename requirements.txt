@@ -1,5 +1,5 @@
 
-streamlit==0.75.0
+streamlit
 torch>=1.7.0
 torchvision>=0.8.1
 numpy==1.23.1           # otherwise issues with track eval
