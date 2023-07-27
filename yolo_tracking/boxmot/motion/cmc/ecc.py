@@ -3,7 +3,7 @@ import time
 import cv2
 import numpy as np
 
-from boxyolo_tracking.boxmotmot.motion.cmc.cmc_interface import CMCInterface
+from yolo_tracking.boxmot.motion.cmc.cmc_interface import CMCInterface
 from yolo_tracking.boxmot.utils import BOXMOT
 
 
