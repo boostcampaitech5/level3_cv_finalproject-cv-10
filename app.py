@@ -27,12 +27,14 @@ def main():
         )
 
     if mode == "Online":
+        st.subheader("APAS (Advanced Pedestrian Assistance System)")
         st.header("Online Inference Mode")
         with st.spinner("webcam"):
             # if webcam_button:
             webrtc_init()
 
     elif mode == "Offline":
+        st.subheader("APAS (Advanced Pedestrian Assistance System)")
         st.header("Offline Inference Mode")
         data_type = st.selectbox("Please select data type !", ("Image", "Video"))
         # upload data
