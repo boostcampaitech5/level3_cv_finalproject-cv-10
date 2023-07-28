@@ -166,7 +166,7 @@ def webrtc_init():
                             text_place.success("안전합니다 !")
                 # 2. 워닝 모드였는데 5개 이하가 detect -> nomal mode
                 elif len(result) < 5 and mode == "warning_mode":
-                    mode = "nomal_mode"
+                    mode = "normal_mode"
                     text_place.warning("주변에 탐지되는 물체가 5개 이하입니다!")
                     audio_file_path = f"/mount/src/level3_cv_finalproject-cv-10/warning_system/tts/{mode}.mp3"
                     autoplay_audio(audio_file_path)
