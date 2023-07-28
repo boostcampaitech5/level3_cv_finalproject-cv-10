@@ -197,7 +197,7 @@ def speed_direction_batch(dets, tracks):
 
 def linear_assignment(cost_matrix):
     try:
-        import lap
+        import lap.lap as lap
 
         _, x, y = lap.lapjv(cost_matrix, extend_cost=True)
         return np.array([[y[i], i] for i in x if i >= 0])  #
