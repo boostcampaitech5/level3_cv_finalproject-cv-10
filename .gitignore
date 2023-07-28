@@ -1,0 +1,6 @@
+data/
+datasets/
+runs/
+cache/
+__pycache__/
+surface_data/
