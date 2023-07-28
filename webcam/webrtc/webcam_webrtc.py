@@ -19,16 +19,18 @@ import queue
 
 
 def generate_label_colors():
-    colors = np.array([
-        [0.1, 254.0, 0.1],    # 초록
-        [0.1, 254.0, 254.0],  # 노랑
-        [0.1, 254.0, 254.0],  # 노랑
-        [0.1, 254.0, 254.0],  # 노랑 
-        [0.1, 164.0, 254.0],  # 주황
-        [ 0.1, 164.0, 254.0], # 주황 
-        [ 0.1, 164.0, 254.0], # 주황 
-        [0.1, 0.1, 254.1],    # 빨강
-    ])
+    colors = np.array(
+        [
+            [0.1, 254.0, 0.1],  # 초록
+            [0.1, 254.0, 254.0],  # 노랑
+            [0.1, 254.0, 254.0],  # 노랑
+            [0.1, 254.0, 254.0],  # 노랑
+            [0.1, 164.0, 254.0],  # 주황
+            [0.1, 164.0, 254.0],  # 주황
+            [0.1, 164.0, 254.0],  # 주황
+            [0.1, 0.1, 254.1],  # 빨강
+        ]
+    )
     return colors
 
 
@@ -64,8 +66,10 @@ def create_video_frame_callback():
         for xmin, ymin, xmax, ymax, score, label in boxes:
             xmin, ymin, xmax, ymax = map(int, [xmin, ymin, xmax, ymax])
             label_name = classes[int(label.item())]
-            
-            classnum,warning_state = warning_state_Algorithm(xmin, ymin, xmax, ymax, label_name, h, w)
+
+            classnum, warning_state = warning_state_Algorithm(
+                xmin, ymin, xmax, ymax, label_name, h, w
+            )
             color = COLORS[warning_state]
             cv2.rectangle(image, (xmin, ymin), (xmax, ymax), color, 2)
             cv2.putText(
@@ -77,15 +81,11 @@ def create_video_frame_callback():
                 color,
                 2,
             )
-            
-            if frame_count % 50 == 0: # 50 frame 마다 danger에 append
-                # danger.append(label_name)
-                danger.append(
-                   (classnum,warning_state)
-                )
 
-            
-            
+            if frame_count % 50 == 0:  # 50 frame 마다 danger에 append
+                # danger.append(label_name)
+                danger.append((classnum, warning_state))
+
         if frame_count % 50 == 0:
             result_queue.put(danger)
         frame_queue.put(frame_count)
@@ -115,7 +115,7 @@ def autoplay_audio(file_path: str, playback_rate=1.5):
 
 def webrtc_init():
     global model
-    
+
     model = YOLO("/mount/src/level3_cv_finalproject-cv-10/weights/yolov8n_jp.pt")
     os.environ["TWILIO_ACCOUNT_SID"] = st.secrets["TWILIO_ACCOUNT_SID"]
     os.environ["TWILIO_AUTH_TOKEN"] = st.secrets["TWILIO_AUTH_TOKEN"]
@@ -137,26 +137,25 @@ def webrtc_init():
     )
 
     text_place = st.empty()
-    
-    mode = "nomal_mode"
-    
+
+    mode = "normal_mode"
+
     while ctx.state.playing:
-        
         frame_num = frame_queue.get()
         if frame_num % 50 == 0:  # for every 50 frames
             result = result_queue.get()
 
             if len(result) != 0:
                 result.sort(key=lambda x: x[1], reverse=True)
-                
+
                 # 1. 노말 모드였는데 5개이상이 detect -> warning mode
-                if len(result) >= 5 and mode == "nomal_mode": 
-                    if result[4][1] >= 1:                      # 5개 이상이 위험구역 안에 들어왔을때
-                        mode = "warning_mode" 
+                if len(result) >= 5 and mode == "nomal_mode":
+                    if result[4][1] >= 1:  # 5개 이상이 위험구역 안에 들어왔을때
+                        mode = "warning_mode"
                         text_place.warning("주변에 탐지되는 물체가 5개 이상입니다!")
                         audio_file_path = f"/mount/src/level3_cv_finalproject-cv-10/warning_system/tts/{mode}.mp3"
                         autoplay_audio(audio_file_path)
-                    else:                                      # 5개 이상 detect가 되었으나 위험구역안에 5개 이하
+                    else:  # 5개 이상 detect가 되었으나 위험구역안에 5개 이하
                         danger_class, danger_level = result[0]
                         if danger_level != 0:  # except safe
                             text_place.warning("주의하세요 !")
@@ -165,13 +164,13 @@ def webrtc_init():
                             autoplay_audio(audio_file_path)
                         else:
                             text_place.success("안전합니다 !")
-                # 2. 워닝 모드였는데 5개 이하가 detect -> nomal mode         
-                elif len(result) < 5 and mode == "warning_mode": 
-                        mode = "nomal_mode"
-                        text_place.warning("주변에 탐지되는 물체가 5개 이하입니다!")
-                        audio_file_path = f"/mount/src/level3_cv_finalproject-cv-10/warning_system/tts/{mode}.mp3"
-                        autoplay_audio(audio_file_path)
-                        
+                # 2. 워닝 모드였는데 5개 이하가 detect -> nomal mode
+                elif len(result) < 5 and mode == "warning_mode":
+                    mode = "nomal_mode"
+                    text_place.warning("주변에 탐지되는 물체가 5개 이하입니다!")
+                    audio_file_path = f"/mount/src/level3_cv_finalproject-cv-10/warning_system/tts/{mode}.mp3"
+                    autoplay_audio(audio_file_path)
+
                 # 3. 워닝 모드였는데 5개 이상 detect -> stil 워닝모드
                 elif len(result) >= 5 and mode == "warning_mode":
                     danger_class, danger_level = result[0]
@@ -182,9 +181,9 @@ def webrtc_init():
                         autoplay_audio(audio_file_path)
                     else:
                         text_place.success("안전합니다2 !")
-                
+
                 # 4. 노말 모드였는데 5개 이하 detect -> still nomal mode
-                elif len(result) < 5 and mode ==  "nomal_mode":
+                elif len(result) < 5 and mode == "nomal_mode":
                     danger_class, danger_level = result[0]
                     if danger_level != 0:  # except safe
                         text_place.warning("주의하세요 !")
